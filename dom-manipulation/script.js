@@ -7,6 +7,63 @@ function saveQuotes() {
   localStorage.setItem("categories", JSON.stringify(getUniqueCategories()));
 }
 
+// Function to display a random quote
+function showRandomQuote() {
+    const quoteDisplay = document.getElementById("quoteDisplay");
+    if (quotes.length === 0) {
+      quoteDisplay.textContent = "No quotes available. Add one!";
+      return;
+    }
+    const randomIndex = Math.floor(Math.random() * quotes.length);
+    const { text, category } = quotes[randomIndex];
+    quoteDisplay.innerHTML = `<p><strong>${category}:</strong> "${text}"</p>`;
+    sessionStorage.setItem("lastViewedQuote", JSON.stringify({ text, category }));
+  }
+  
+  document.getElementById("newQuote").addEventListener("click", showRandomQuote);
+
+// Function to create and add a new quote form dynamically
+function createAddQuoteForm() {
+    const formContainer = document.createElement("div");
+    
+    const inputText = document.createElement("input");
+    inputText.setAttribute("type", "text");
+    inputText.setAttribute("id", "newQuoteText");
+    inputText.setAttribute("placeholder", "Enter a new quote");
+  
+    const inputCategory = document.createElement("input");
+    inputCategory.setAttribute("type", "text");
+    inputCategory.setAttribute("id", "newQuoteCategory");
+    inputCategory.setAttribute("placeholder", "Enter quote category");
+  
+    const addButton = document.createElement("button");
+    addButton.textContent = "Add Quote";
+    addButton.addEventListener("click", addQuote);
+  
+    formContainer.appendChild(inputText);
+    formContainer.appendChild(inputCategory);
+    formContainer.appendChild(addButton);
+  
+    document.body.appendChild(formContainer);
+  }
+  
+  // Function to add a new quote to the list dynamically
+  function addQuote() {
+    const newText = document.getElementById("newQuoteText").value.trim();
+    const newCategory = document.getElementById("newQuoteCategory").value.trim();
+    
+    if (newText === "" || newCategory === "") {
+      alert("Please enter both a quote and a category.");
+      return;
+    }
+    
+    quotes.push({ text: newText, category: newCategory });
+    saveQuotes();
+    document.getElementById("newQuoteText").value = "";
+    document.getElementById("newQuoteCategory").value = "";
+    alert("Quote added successfully!");
+  }
+
 // Fetch quotes from server and sync with local storage
 async function syncWithServer() {
   try {
@@ -100,7 +157,7 @@ function addQuote() {
 
 // Function to export quotes as a JSON file
 function exportToJsonFile() {
-  const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(quotes));
+  const dataStr = "data:application/json; Blob," + encodeURIComponent(JSON.stringify(quotes));
   const downloadAnchor = document.createElement("a");
   downloadAnchor.setAttribute("href", dataStr);
   downloadAnchor.setAttribute("download", "quotes.json");
