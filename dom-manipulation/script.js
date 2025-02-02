@@ -74,6 +74,7 @@ async function fetchQuotesFromServer() {
     let mergedQuotes = mergeQuotes(quotes, newQuotes);
     
     localStorage.setItem("quotes", JSON.stringify(mergedQuotes));
+    document.getElementById("syncQuotes").innerText = "Quotes synced with server!";
     alert("Quotes synced with server!");
     populateCategories();
   } catch (error) {
