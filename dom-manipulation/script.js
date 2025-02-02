@@ -67,7 +67,7 @@ function createAddQuoteForm() {
 // Fetch quotes from server and sync with local storage
 async function fetchQuotesFromServer() {
   try {
-    const response = await fetch(SERVER_URL);
+    const response = await fetch(SERVER_URL, { method: "POST", headers: { "Content-Type": "application/json" } });
     const serverQuotes = await response.json();
     
     let newQuotes = serverQuotes.map(q => ({ text: q.title, category: "Uncategorized" }));
