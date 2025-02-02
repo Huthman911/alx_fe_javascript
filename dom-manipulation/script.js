@@ -65,7 +65,7 @@ function createAddQuoteForm() {
   }
 
 // Fetch quotes from server and sync with local storage
-async function syncWithServer() {
+async function fetchQuotesFromServer() {
   try {
     const response = await fetch(SERVER_URL);
     const serverQuotes = await response.json();
